@@ -4,7 +4,7 @@ import os from './os/index.js';
 
 const { up, cd, ls } = nwd;
 const { cat, add, rn, cp, rm, mv } = fs;
-const { EOL, cpus, homedir } = os;
+const { EOL, cpus, homedir, username } = os;
 
 const operationsList = {
     "up": up,
@@ -19,6 +19,7 @@ const operationsList = {
     "EOL": EOL,
     "cpus": cpus,
     "homedir": homedir,
+    "username": username,
 }
 
 export default operationsList;
