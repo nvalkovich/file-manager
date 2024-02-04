@@ -21,8 +21,8 @@ const cd = async (pathParams) => {
 
     await access(updatedPath);
     setPathToCurrentDirectory(updatedPath);
-  } catch {
-    throw new Error ('Operation failed!');
+  } catch(err) {
+    console.error('Operation failed!');
   }
 }
 
