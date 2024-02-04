@@ -1,4 +1,4 @@
-import { getPathToCurrentDirectory, setPathToCurrentDirectory } from "../../pathStorage.js";
+import { getPathToCurrentDirectory, setPathToCurrentDirectory } from "../../storage/pathStorage.js";
 import { dirname } from 'node:path';
 
 const up = () => {
