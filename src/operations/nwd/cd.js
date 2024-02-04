@@ -1,10 +1,11 @@
 import { getPathToCurrentDirectory, setPathToCurrentDirectory } from "../../storage/pathStorage.js";
 import { resolve, isAbsolute } from 'node:path';
 import { access } from "node:fs/promises";
+import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const cd = async (pathParams) => {
   if (pathParams.length > 1 || typeof pathParams[0] !== 'string') {
-    console.error('Invalid input');
+    logInvalidInputMessage();
     return;
   }
 
@@ -22,7 +23,7 @@ const cd = async (pathParams) => {
     await access(updatedPath);
     setPathToCurrentDirectory(updatedPath);
   } catch(err) {
-    console.error('Operation failed!');
+    logOperationFailedMessage();
   }
 }
 

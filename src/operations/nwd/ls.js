@@ -1,5 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { getPathToCurrentDirectory } from "../../storage/pathStorage.js";
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const directoryContentTypes = {
   'directory': 'directory',
@@ -13,15 +14,19 @@ const createContentTableData = (files, type) => {
 const ls = async () => {
   const currentPath = getPathToCurrentDirectory();
 
-  const directoryContent = await readdir(currentPath, {withFileTypes: true});
+  try {
+    const directoryContent = await readdir(currentPath, {withFileTypes: true});
 
-  const directories = directoryContent.filter((file) => file.isDirectory());
-  const directoriesTableData = createContentTableData(directories, directoryContentTypes.directory);
+    const directories = directoryContent.filter((file) => file.isDirectory());
+    const directoriesTableData = createContentTableData(directories, directoryContentTypes.directory);
 
-  const files = directoryContent.filter((file) => file.isFile());
-  const filesTableData = createContentTableData(files, directoryContentTypes.file);
+    const files = directoryContent.filter((file) => file.isFile());
+    const filesTableData = createContentTableData(files, directoryContentTypes.file);
 
-  console.table(directoriesTableData.concat(filesTableData));
+    console.table(directoriesTableData.concat(filesTableData));
+  } catch {
+    logOperationFailedMessage();
+  }
 }
 
 export default ls;

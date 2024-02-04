@@ -1,7 +1,6 @@
-import { createReadStream } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
-import { pipeline } from 'node:stream/promises';
 import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const cat = async (pathParams) => {
@@ -11,13 +10,12 @@ const cat = async (pathParams) => {
   }
 
   const currentDirectory = getPathToCurrentDirectory();
-
-  const [ pathToFile ] = pathParams;
+  const [ fileName ] = pathParams;
   
+  const pathToFile = resolve(currentDirectory, fileName);
+
   try {
-    const readableStream = createReadStream(resolve(currentDirectory, pathToFile));
-    await pipeline(readableStream, process.stdout, {end: false});
-    process.stdout.write('\n');
+    await writeFile(pathToFile, '', { flag: 'wx' });
   } catch {
     logOperationFailedMessage();
   }
