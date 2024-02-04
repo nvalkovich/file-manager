@@ -2,7 +2,7 @@ import nwd from './nwd/index.js';
 import fs from './fs/index.js';
 
 const { up, cd, ls } = nwd;
-const { cat, add, rn, cp, rm } = fs;
+const { cat, add, rn, cp, rm, mv } = fs;
 
 const operationsList = {
     "up": up,
@@ -12,7 +12,8 @@ const operationsList = {
     "add": add,
     "rn": rn,
     "cp": cp,
-    "rm": rm
+    "rm": rm,
+    "mv": mv,
 }
 
 export default operationsList;
