@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
 import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
 
-const cat = async (pathParams) => {
+const add = async (pathParams) => {
   if (pathParams.length > 1 || typeof pathParams[0] !== 'string') {
     logInvalidInputMessage();
     return;
@@ -21,4 +21,4 @@ const cat = async (pathParams) => {
   }
 }
 
-export default cat;
+export default add;
