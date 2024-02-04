@@ -24,7 +24,10 @@ rl.on('line', async (input) => {
   if (input === exitCommand) {
     rl.close();
   } else {
-      const parsed = parseInput(input);
+      const parsed = input.startsWith('os ') 
+      ? parseInput(input.slice(input.lastIndexOf('-') + 1)) 
+      : parseInput(input);
+
       const {command, params} = parsed;
       const operation = operationsList[command];
 
