@@ -8,17 +8,12 @@ const cd = async (pathParams) => {
     logInvalidInputMessage();
     return;
   }
-
+  
   const [ newPath ] = pathParams;
   const currentPath = getPathToCurrentDirectory();
-  let updatedPath = '';
 
   try { 
-    if (isAbsolute(newPath)) {
-      updatedPath = newPath;
-    } else {
-      updatedPath = resolve(currentPath, newPath);
-    }
+    const updatedPath = isAbsolute(newPath)? newPath : resolve(currentPath, newPath);
 
     await access(updatedPath);
     setPathToCurrentDirectory(updatedPath);

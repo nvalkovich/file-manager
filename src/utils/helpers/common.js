@@ -1,3 +1,5 @@
+import { access, constants } from 'node:fs/promises';
+
 export const getUserName = () => {
   const argName = '--username';
 
@@ -13,5 +15,15 @@ export const parseInput = (input) => {
   return {
     command,
     params
+  }
+}
+
+export const isFileExist = async (pathToFile) => {
+  try {
+      await access(pathToFile, constants.F_OK);
+      return true;
+  } catch (err) {
+      if (err.code === 'ENOENT') return false;
+      throw err;
   }
 }
