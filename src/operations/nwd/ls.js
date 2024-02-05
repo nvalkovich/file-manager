@@ -1,6 +1,6 @@
 import { readdir } from 'node:fs/promises';
 import { getPathToCurrentDirectory } from "../../storage/pathStorage.js";
-import { logOperationFailedMessage } from '../../utils/helpers/output.js';
+import { logError } from '../../utils/helpers/common.js';
 
 const directoryContentTypes = {
   'directory': 'directory',
@@ -24,8 +24,8 @@ const ls = async () => {
     const filesTableData = createContentTableData(files, directoryContentTypes.file);
 
     console.table(directoriesTableData.concat(filesTableData));
-  } catch {
-    logOperationFailedMessage();
+  } catch (e) {
+    logError(e);
   }
 }
 

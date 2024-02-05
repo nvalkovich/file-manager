@@ -1,18 +1,17 @@
 import { rename } from 'node:fs/promises';
-import { resolve, isAbsolute } from 'node:path';
+import { resolve } from 'node:path';
 import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
-import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
-import { isFileExist } from '../../utils/helpers/common.js';
+import { determinePath } from '../../utils/helpers/path.js';
+import { logError, isValidArgs, isFileExist } from '../../utils/helpers/common.js';
 
 const rn = async (pathParams) => {
-  if (pathParams.length !== 2) {
-    logInvalidInputMessage();
+  if (!isValidArgs(pathParams, 2)) {
     return;
   }
 
   const [path, newName] = pathParams;
   const currentPath = getPathToCurrentDirectory();
-  const pathToFile = isAbsolute(path)? path : resolve(currentPath, path);
+  const pathToFile = determinePath(path);
 
   try {
     const destFile = resolve(currentPath, newName);
@@ -21,8 +20,8 @@ const rn = async (pathParams) => {
       }
       
       await rename(pathToFile, destFile);
-  } catch {
-      logOperationFailedMessage();
+  } catch (e){
+      logError(e);
   }
 }
 

@@ -1,33 +1,26 @@
-  
-import { createWriteStream, createReadStream } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
-import { resolve, isAbsolute, basename } from 'node:path';
-import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
+
+import  path, { resolve } from 'node:path';
 import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
-import { pipeline } from 'node:stream/promises';
+import { determinePath } from '../../utils/helpers/path.js';
+import { logError, isValidArgs } from '../../utils/helpers/common.js';
+import { copyFile } from '../../utils/helpers/fs.js';
 
 const cp = async (pathParams) => {
-  if (pathParams.length !== 2) {
-    logInvalidInputMessage();
+  if (!isValidArgs(pathParams, 2)) {
     return;
   }
 
   const currentDirectory = getPathToCurrentDirectory();
   const [pathToSource, newDirectory] = pathParams;
-  const fileName = basename(pathToSource);
+  const fileName = path.win32.basename(pathToSource);
 
-  const sourcePath = isAbsolute(pathToSource) ? pathToSource : resolve(currentDirectory, pathToSource)
+  const sourcePath = determinePath(pathToSource);
   const destPath = resolve(currentDirectory, newDirectory, fileName);
 
   try {
-    await writeFile(destPath, '', { flag: 'wx' });
-
-    const readableStream = createReadStream(sourcePath);
-    const writeableStream = createWriteStream(destPath);
-
-    await pipeline(readableStream, writeableStream);
-  } catch {
-    logOperationFailedMessage();
+    await copyFile(sourcePath, destPath)
+  } catch (e) {
+    logError(e);
   }
 }
 

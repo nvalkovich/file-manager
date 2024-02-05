@@ -1,23 +1,20 @@
 import { unlink } from 'node:fs/promises';
-import { resolve, isAbsolute } from 'node:path';
-import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
-import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
+import { determinePath } from '../../utils/helpers/path.js';
+import { logError, isValidArgs } from '../../utils/helpers/common.js'; 
 
 const rm = async (pathParams) => {
-  if (pathParams.length > 1 || typeof pathParams[0] !== 'string') {
-    logInvalidInputMessage();
+  if (!isValidArgs(pathParams, 1)) {
     return;
   }
 
-  const currentDirectory = getPathToCurrentDirectory();
   const [ path ] = pathParams;
   
-  const pathToFile = isAbsolute(path) ? path : resolve(currentDirectory, path);
+  const pathToFile = determinePath(path);
 
   try {
     await unlink(pathToFile);
-  } catch {
-    logOperationFailedMessage();
+  } catch (e) {
+    logError(e);
   }
 }
 

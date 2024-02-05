@@ -13,3 +13,4 @@ export const logFarewellMessage = (username) => {
 export const logCurrentPathMessage = (path) => {
   console.log(`You are currently in ${path}`);
 }
+

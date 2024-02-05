@@ -30,10 +30,12 @@ rl.on('line', async (input) => {
       : parseInput(input);
 
       const {command, params} = parsed;
+
       const operation = operationsList[command];
 
       if (!operation) {
         logInvalidInputMessage();
+        logCurrentPathMessage(getPathToCurrentDirectory());
         return;
       }
       

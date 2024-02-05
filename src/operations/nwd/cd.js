@@ -1,24 +1,34 @@
-import { getPathToCurrentDirectory, setPathToCurrentDirectory } from "../../storage/pathStorage.js";
-import { resolve, isAbsolute } from 'node:path';
-import { access } from "node:fs/promises";
-import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
+import { setPathToCurrentDirectory } from "../../storage/pathStorage.js";
+import { sep, join } from 'node:path';
+import { access, stat } from "node:fs/promises";
+import { determinePath } from "../../utils/helpers/path.js";
+import { logError, isValidArgs } from '../../utils/helpers/common.js'; 
 
 const cd = async (pathParams) => {
-  if (pathParams.length > 1 || typeof pathParams[0] !== 'string') {
-    logInvalidInputMessage();
+  if (!isValidArgs(pathParams, 1)) {
     return;
   }
   
-  const [ newPath ] = pathParams;
-  const currentPath = getPathToCurrentDirectory();
+  let [ newPath ] = pathParams;
+  
+  if (newPath.includes(':') && (!newPath.includes(sep))) {
+    newPath = join(newPath, sep);
+  }
 
   try { 
-    const updatedPath = isAbsolute(newPath)? newPath : resolve(currentPath, newPath);
+    const updatedPath = determinePath(newPath);
 
     await access(updatedPath);
-    setPathToCurrentDirectory(updatedPath);
+
+    const stats = await stat(updatedPath);
+    if (stats.isDirectory()) {
+      setPathToCurrentDirectory(updatedPath);
+    } else {
+      console.error('Error: not a directory');
+      throw new Error();
+    }
   } catch(err) {
-    logOperationFailedMessage();
+    logError(err);
   }
 }
 

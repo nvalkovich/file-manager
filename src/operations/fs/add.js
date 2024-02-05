@@ -1,23 +1,20 @@
 import { writeFile } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
-import { logInvalidInputMessage, logOperationFailedMessage } from '../../utils/helpers/output.js';
+import { determinePath } from '../../utils/helpers/path.js';
+import { logError, isValidArgs } from '../../utils/helpers/common.js'; 
 
 const add = async (pathParams) => {
-  if (pathParams.length > 1 || typeof pathParams[0] !== 'string') {
-    logInvalidInputMessage();
+  if (!isValidArgs(pathParams, 1)) {
     return;
   }
 
-  const currentDirectory = getPathToCurrentDirectory();
   const [ fileName ] = pathParams;
   
-  const pathToFile = resolve(currentDirectory, fileName);
+  const pathToFile = determinePath(fileName);
 
   try {
     await writeFile(pathToFile, '', { flag: 'wx' });
-  } catch {
-    logOperationFailedMessage();
+  } catch (e) {
+    logError(e);
   }
 }
 
