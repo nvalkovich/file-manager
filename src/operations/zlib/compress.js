@@ -17,6 +17,8 @@ const compress = async (pathParams) => {
   try {
     const source = createReadStream(pathToSourceFile);
     const destination = createWriteStream(pathToDestinationFile);
+
+    //compress
   
     await pipeline(source, createBrotliCompress(), destination);
   } catch (e) {

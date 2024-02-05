@@ -12,7 +12,6 @@ import { getPathToCurrentDirectory } from './storage/pathStorage.js';
 import operationsList from './operations/operationsList.js';
 
 const exitCommand = '.exit';
-const osCommandPrefix = '--';
 
 const username = getUserName();
 
@@ -25,10 +24,7 @@ rl.on('line', async (input) => {
   if (input === exitCommand) {
     rl.close();
   } else {
-      const parsed = input.startsWith('os ') && input.includes(osCommandPrefix)
-      ? parseInput(input.slice(input.indexOf(osCommandPrefix) + osCommandPrefix.length)) 
-      : parseInput(input);
-
+      const parsed = parseInput(input);
       const {command, params} = parsed;
 
       const operation = operationsList[command];
