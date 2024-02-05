@@ -1,7 +1,8 @@
 import { rename } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { determinePath } from '../../utils/helpers/path.js';
-import { logError, isValidArgs, isFileExist } from '../../utils/helpers/common.js';
+import { isValidArgs, isFileExist } from '../../utils/helpers/common.js';
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const rn = async (pathParams) => {
   if (!isValidArgs(pathParams, 2)) {
@@ -19,8 +20,8 @@ const rn = async (pathParams) => {
       }
       
       await rename(pathToFile, destFile);
-  } catch (e){
-      logError(e);
+  } catch {
+    logOperationFailedMessage();
   }
 }
 

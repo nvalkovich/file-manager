@@ -1,6 +1,7 @@
 import { unlink } from 'node:fs/promises';
 import { determinePath } from '../../utils/helpers/path.js';
-import { logError, isValidArgs } from '../../utils/helpers/common.js'; 
+import { isValidArgs } from '../../utils/helpers/common.js'; 
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const rm = async (pathParams) => {
   if (!isValidArgs(pathParams, 1)) {
@@ -13,8 +14,8 @@ const rm = async (pathParams) => {
 
   try {
     await unlink(pathToFile);
-  } catch (e) {
-    logError(e);
+  } catch {
+    logOperationFailedMessage();
   }
 }
 

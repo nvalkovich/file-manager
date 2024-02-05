@@ -2,7 +2,8 @@ import { setPathToCurrentDirectory } from "../../storage/pathStorage.js";
 import { sep, join } from 'node:path';
 import { access, stat } from "node:fs/promises";
 import { determinePath } from "../../utils/helpers/path.js";
-import { logError, isValidArgs } from '../../utils/helpers/common.js'; 
+import { isValidArgs } from '../../utils/helpers/common.js'; 
+
 
 const cd = async (pathParams) => {
   if (!isValidArgs(pathParams, 1)) {
@@ -27,8 +28,8 @@ const cd = async (pathParams) => {
       console.error('Error: not a directory');
       throw new Error();
     }
-  } catch(err) {
-    logError(err);
+  } catch {
+    logOperationFailedMessage();
   }
 }
 

@@ -42,5 +42,6 @@ rl.on('line', async (input) => {
 });
 
 rl.on('close', () => {
+  process.stdout.write('\n');
   logFarewellMessage(username);
 })

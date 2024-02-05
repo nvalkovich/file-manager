@@ -2,7 +2,8 @@ import { createReadStream } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { pipeline } from 'node:stream/promises';
 import { determinePath } from '../../utils/helpers/path.js';
-import { logError, isValidArgs } from '../../utils/helpers/common.js';
+import { isValidArgs } from '../../utils/helpers/common.js';
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const hash = async (pathParams) => {
   if (!isValidArgs(pathParams, 1)) {
@@ -18,8 +19,8 @@ const hash = async (pathParams) => {
   
     await pipeline(readableStream, createdHash.setEncoding('hex'), process.stdout, {end: false});
     process.stdout.write('\n');
-  } catch (e) {
-    logError(e);
+  } catch {
+    logOperationFailedMessage();
   }
 };
 

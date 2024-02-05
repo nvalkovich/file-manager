@@ -2,8 +2,9 @@
 import  path, { resolve } from 'node:path';
 import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
 import { determinePath } from '../../utils/helpers/path.js';
-import { logError, isValidArgs } from '../../utils/helpers/common.js';
+import { isValidArgs } from '../../utils/helpers/common.js';
 import { copyFile } from '../../utils/helpers/fs.js';
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const cp = async (pathParams) => {
   if (!isValidArgs(pathParams, 2)) {
@@ -19,8 +20,8 @@ const cp = async (pathParams) => {
 
   try {
     await copyFile(sourcePath, destPath)
-  } catch (e) {
-    logError(e);
+  } catch {
+    logOperationFailedMessage();
   }
 }
 

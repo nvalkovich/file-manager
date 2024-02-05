@@ -1,8 +1,9 @@
 import { createWriteStream, createReadStream } from 'node:fs';
 import { createBrotliCompress } from 'node:zlib';
 import { determinePath } from '../../utils/helpers/path.js';
-import { logError, isValidArgs, isFileExist } from '../../utils/helpers/common.js';
+import { isValidArgs, isFileExist } from '../../utils/helpers/common.js';
 import { pipeline } from 'node:stream/promises';
+import { logOperationFailedMessage } from '../../utils/helpers/output.js';
 
 const compress = async (pathParams) => {
   if (!isValidArgs(pathParams, 2)) {
@@ -18,13 +19,13 @@ const compress = async (pathParams) => {
     if (await isFileExist(pathToDestinationFile)) {
       throw new Error;
     }
-    
+
     const source = createReadStream(pathToSourceFile);
     const destination = createWriteStream(pathToDestinationFile);
 
     await pipeline(source, createBrotliCompress(), destination);
-  } catch (e) {
-    logError(e);
+  } catch {
+    logOperationFailedMessage();
   }
 };
 
