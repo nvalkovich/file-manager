@@ -9,8 +9,19 @@ export const getUserName = () => {
 }
 
 export const parseInput = (input) => {
-  const splittedInput = input.trim().split(' ');
-  const [command, ...params] = splittedInput;
+  const regExp = /[^\s"]+|"([^"]*)"/gi;
+  const parsed = [];
+
+  let match;
+
+  do {
+    match = regExp.exec(input.trim());
+    if (match) {
+      parsed.push(match[1] ? match[1] : match[0]);
+    }
+  } while (match)
+
+  const [command, ...params] = parsed;
   
   return {
     command,
