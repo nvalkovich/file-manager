@@ -1,6 +1,5 @@
 import { rename } from 'node:fs/promises';
-import { resolve } from 'node:path';
-import { getPathToCurrentDirectory } from '../../storage/pathStorage.js';
+import { resolve, dirname } from 'node:path';
 import { determinePath } from '../../utils/helpers/path.js';
 import { logError, isValidArgs, isFileExist } from '../../utils/helpers/common.js';
 
@@ -10,11 +9,11 @@ const rn = async (pathParams) => {
   }
 
   const [path, newName] = pathParams;
-  const currentPath = getPathToCurrentDirectory();
   const pathToFile = determinePath(path);
 
   try {
-    const destFile = resolve(currentPath, newName);
+    const destFile = resolve(dirname(pathToFile), newName);
+
       if (await isFileExist(destFile)) {
         throw new Error;
       }
