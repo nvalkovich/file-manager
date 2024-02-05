@@ -1,5 +1,5 @@
 import { access, constants } from 'node:fs/promises';
-import { logInvalidInputMessage, logOperationFailedMessage } from './output.js';
+import { logInvalidInputMessage } from './output.js';
 
 export const getUserName = () => {
   const argName = '--username';
